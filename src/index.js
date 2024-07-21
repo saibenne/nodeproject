@@ -33,7 +33,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
  
 // MongoDB connection setup to Datadb
-mongoose.connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/Datadb`, {
+mongoose.connect(`mongodb+srv://nftmatata:9573879821@cluster0.k0g5sqa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -52,7 +52,9 @@ app.use(
     resave: false,
 })
 )
- 
+app.get('/', (req, res) => {
+  res.redirect('/home')
+});
 app.use((req,res, next)=>{
     res.locals.message = req.session.message;
     delete req.session.message;
@@ -112,7 +114,8 @@ app.post('/login', async (req, res) => {
     req.session.currentUser = { _id: user._id, username: user.username };
  
     // Redirect to home page
-    res.redirect('/');
+    console.log(user)
+    res.render('home',{ user });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).send('Internal Server Error');
